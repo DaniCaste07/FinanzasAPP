@@ -1,0 +1,267 @@
+/* Variables de color para mantener la sintonía Fintech */
+:root {
+    --bg-dark: #0b111b;
+    --card-bg: #162130;
+    --accent: #00ff88; /* Verde neón */
+    --text-main: #ffffff;
+    --text-muted: #94a3b8;
+    --border: #1f2d40;
+    --sidebar-width: 240px;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    display: flex; /* Para alinear sidebar y main */
+    min-height: 100vh;
+}
+
+/* --- BARRA LATERAL (SIDEBAR) --- */
+.sidebar {
+    width: var(--sidebar-width);
+    background-color: var(--card-bg);
+    border-right: 1px solid var(--border);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100vh;
+}
+
+.sidebar h2 {
+    color: var(--accent);
+    font-size: 1.5rem;
+    margin-bottom: 40px;
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin-bottom: 10px;
+}
+
+.sidebar ul li a {
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 12px 15px;
+    display: block;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.sidebar ul li a:hover, .sidebar ul li a.active {
+    background: rgba(0, 255, 136, 0.1);
+    color: var(--accent);
+}
+
+/* --- CONTENIDO PRINCIPAL --- */
+.content {
+    margin-left: var(--sidebar-width); /* Deja espacio para la sidebar fija */
+    padding: 40px;
+    width: 100%;
+}
+
+header h1 {
+    font-size: 1.8rem;
+    margin-bottom: 30px;
+}
+
+header h1 span {
+    color: var(--accent);
+}
+
+/* --- GRID DE TARJETAS --- */
+.grid-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
+
+.card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    transition: transform 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card h3 {
+    margin: 0 0 15px 0;
+    font-size: 1rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.price {
+    font-size: 2.2rem;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.trend {
+    font-size: 0.9rem;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 5px;
+}
+
+.trend.up { background: rgba(0, 255, 136, 0.1); color: var(--accent); }
+
+/* --- CONTENEDOR DEL GRÁFICO --- */
+.chart-container {
+    grid-column: span 2; /* El gráfico ocupa más espacio */
+    min-height: 300px;
+}
+
+/* --- SIMULADOR DE HIPOTECA --- */
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--text-muted);
+}
+
+input[type="range"] {
+    width: 100%;
+    accent-color: var(--accent);
+    cursor: pointer;
+}
+
+.monto-grande {
+    color: var(--accent);
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Estilos para el Formulario de Inversiones */
+.form-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 25px;
+    border-radius: 15px;
+    margin-top: 20px;
+}
+
+#formInversion {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#formInversion .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#formInversion input {
+    background: var(--bg-dark);
+    border: 1px solid var(--border);
+    padding: 12px;
+    border-radius: 8px;
+    color: white;
+    transition: 0.3s;
+}
+
+#formInversion input:focus {
+    border-color: var(--accent);
+    outline: none;
+    box-shadow: 0 0 8px rgba(0, 255, 136, 0.2);
+}
+
+#formInversion label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* Botón personalizado para el formulario */
+.btn-primary {
+    background: var(--accent);
+    color: var(--bg-dark);
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.btn-primary:hover {
+    background: #00cc6e;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+}
+
+.simulator-card {
+    border-left: 5px solid var(--accent); /* Resalta que es un módulo especial */
+}
+
+.resultado-box {
+    margin-top: 25px;
+    padding: 20px;
+    background: rgba(0, 255, 136, 0.05);
+    border-radius: 10px;
+    text-align: center;
+}
+
+.resultado-box p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+}
+
+#resultadoCuota {
+    color: var(--accent);
+    font-size: 2.5rem;
+    margin: 0;
+}
+
+.fintech-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.fintech-table th {
+    text-align: left;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    padding: 12px;
+    border-bottom: 1px solid var(--border);
+}
+
+.fintech-table td {
+    padding: 15px 12px;
+    border-bottom: 1px solid rgba(31, 45, 64, 0.5);
+    font-size: 0.95rem;
+}
+
+.fintech-table tr:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.accent-text {
+    color: var(--accent);
+    font-weight: bold;
+}
