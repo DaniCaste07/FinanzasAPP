@@ -4,11 +4,6 @@ require_once 'conexion.php'; // Conexión PDO
 
 $error = "";
 
-// 1. Si el usuario ya tiene una sesión activa, lo mandamos directo al dashboard
-if (isset($_SESSION['usuario_id'])) {
-    header("Location: dashboard.php");
-    exit();
-}
 
 // 2. Lógica para procesar el inicio de sesión
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login_btn'])) {
