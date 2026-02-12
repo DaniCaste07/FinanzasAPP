@@ -116,7 +116,7 @@ $porcentajeCrecimiento = ($totalInvertido > 0) ? ($beneficioGlobal / $totalInver
     <main class="main-content flex-1">
         <header class="mb-10">
     <h1 class="text-5xl font-black tracking-tight">
-        Hola de nuevo, <span class="text-brand"><?php echo htmlspecialchars($_SESSION['usuario_nombre'] ?? 'Inversor'); ?></span>
+        Hola de nuevo, <span class="text-brand"><?php echo htmlspecialchars($_SESSION['nombre']); ?></span>
     </h1>
     <p class="text-gray-500 mt-2">Este es el estado actual de tu patrimonio financiero.</p>
 </header>
@@ -184,4 +184,4 @@ $porcentajeCrecimiento = ($totalInvertido > 0) ? ($beneficioGlobal / $totalInver
         });
     </script>
 </body>
-</html>
+</html
