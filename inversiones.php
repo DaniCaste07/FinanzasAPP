@@ -59,6 +59,8 @@ $inversiones = $stmt->fetchAll();
                 <a href="dashboard.php" class="block text-gray-400 hover:text-brand py-2 px-3 transition">Resumen General</a>
                 <a href="inversiones.php" class="block text-brand font-bold bg-brand/10 p-2 rounded-lg py-2 px-3">Mis Inversiones</a>
                 <a href="hipotecas.php" class="block text-gray-400 hover:text-brand py-2 px-3 transition">Simulador Hipotecario</a>
+                <a href="planificador.php" class="block text-gray-400 hover:text-brand py-2 px-3 transition">Planificador</a>
+                <a href="libertad.php" class="block text-gray-400 hover:text-brand py-2 px-3 transition">Libertad Financiera</a>
             </nav>
         </div>
         <a href="logout.php" class="text-gray-500 hover:text-red-400 px-3 pb-4">Cerrar Sesión</a>
