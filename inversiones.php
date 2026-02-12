@@ -49,17 +49,19 @@ $inversiones = $stmt->fetchAll();
 </head>
 <body class="text-gray-100 flex">
 
-    <aside class="sidebar p-6 flex flex-col">
-        <div class="flex items-center gap-2 mb-10">
-            <div class="w-8 h-8 bg-brand rounded-lg flex items-center justify-center text-dark-900 font-bold shadow-[0_0_15px_rgba(0,255,136,0.3)]">$</div>
-            <span class="text-xl font-bold text-brand italic tracking-tighter">InvestFlow</span>
+    <aside class="sidebar p-6 flex flex-col justify-between">
+        <div>
+            <div class="flex items-center gap-2 mb-10">
+                <div class="w-8 h-8 bg-brand rounded-lg flex items-center justify-center text-dark-900 font-bold shadow-[0_0_15px_rgba(0,255,136,0.3)]">$</div>
+                <span class="text-xl font-bold text-brand italic tracking-tighter">InvestFlow</span>
+            </div>
+            <nav class="space-y-4">
+                <a href="dashboard.php" class="block text-gray-400 hover:text-brand py-2 px-3 transition">Resumen General</a>
+                <a href="inversiones.php" class="block text-brand font-bold bg-brand/10 p-2 rounded-lg py-2 px-3">Mis Inversiones</a>
+                <a href="hipotecas.php" class="block text-gray-400 hover:text-brand py-2 px-3 transition">Simulador Hipotecario</a>
+            </nav>
         </div>
-        <nav class="space-y-4">
-            <a href="dashboard.php" class="block text-gray-400 hover:text-brand py-2 px-3 transition">Resumen General</a>
-            <a href="inversiones.php" class="block text-brand font-bold bg-brand/10 p-2 rounded-lg py-2 px-3">Mis Inversiones</a>
-            <a href="hipotecas.php" class="block text-gray-400 hover:text-brand py-2 px-3 transition">Simulador Hipotecario</a>
-            <div class="pt-10"><a href="logout.php" class="text-gray-500 hover:text-red-400 px-3">Cerrar Sesión</a></div>
-        </nav>
+        <a href="logout.php" class="text-gray-500 hover:text-red-400 px-3 pb-4">Cerrar Sesión</a>
     </aside>
 
     <main class="main-content flex-1">
