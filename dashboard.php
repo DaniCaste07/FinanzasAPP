@@ -95,16 +95,12 @@ $porcentajeCrecimiento = ($totalInvertido > 0) ? ($beneficioGlobal / $totalInver
                 <span class="text-2xl font-black tracking-tighter">Invest<span class="text-brand">Flow</span></span>
             </div>
             
-            <nav class="space-y-2">
-                <a href="dashboard.php" class="flex items-center gap-3 text-brand font-bold bg-brand/10 py-3 px-4 rounded-xl">
-                    <span>Resumen General</span>
-                </a>
-                <a href="inversiones.php" class="flex items-center gap-3 text-gray-400 hover:text-brand transition-all py-3 px-4 rounded-xl hover:bg-dark-800">
-                    <span>Mis Inversiones</span>
-                </a>
-                <a href="hipotecas.php" class="flex items-center gap-3 text-gray-400 hover:text-brand transition-all py-3 px-4 rounded-xl hover:bg-dark-800">
-                    <span>Simulador Hipotecario</span>
-                </a>
+            <nav class="space-y-4">
+                <a href="dashboard.php" class="block text-brand font-bold bg-brand/10 p-2 rounded-lg py-2 px-3">Resumen General</a>
+                <a href="inversiones.php" class="block text-gray-400 hover:text-brand transition py-2 px-3">Mis Inversiones</a>
+                <a href="hipotecas.php" class="block text-gray-400 hover:text-brand transition py-2 px-3">Simulador Hipotecario</a>
+                <a href="planificador.php" class="block text-gray-400 hover:text-brand py-2 px-3 transition">Planificador</a>
+                <a href="libertad.php" class="block text-gray-400 hover:text-brand py-2 px-3 transition">Libertad Financiera</a>
             </nav>
         </div>
 
