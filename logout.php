@@ -4,6 +4,6 @@ session_unset(); // Limpiar todas las variables de sesión
 session_destroy(); // Destruir la sesión físicamente
 
 // Redirigir al login con un mensaje opcional
-header("Location: login.php?sesion=cerrada");
+header("Location: index.php");
 exit();
 ?>
