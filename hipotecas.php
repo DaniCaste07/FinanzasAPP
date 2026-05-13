@@ -39,7 +39,8 @@ if (!isset($_SESSION['usuario_id'])) {
     <style>
         body { background-color: #030712; font-family: 'Outfit', sans-serif; overflow-x: hidden; }
         .sidebar { width: 280px; height: 100vh; position: fixed; border-right: 1px solid rgba(255,255,255,0.05); z-index: 50; }
-        .main-content { margin-left: 280px; padding: 40px; min-height: 100vh; }
+        .main-content { margin-left: 280px; min-height: 100vh; display: flex; flex-direction: column; }
+        .content-wrapper { padding: 40px; flex-grow: 1; }
         
         .glass-panel { 
             background: rgba(17, 24, 39, 0.6); 
@@ -79,152 +80,104 @@ if (!isset($_SESSION['usuario_id'])) {
 </head>
 <body class="text-gray-100 flex relative">
 
-    <div class="fixed top-[-20%] right-[-10%] w-[800px] h-[800px] bg-brand/5 rounded-full blur-[150px] pointer-events-none z-0"></div>
-    <div class="fixed bottom-[-20%] left-[-10%] w-[600px] h-[600px] bg-blue-600/5 rounded-full blur-[150px] pointer-events-none z-0"></div>
+    <div class="fixed top-[-20%] left-[-10%] w-[800px] h-[800px] bg-brand/5 rounded-full blur-[150px] pointer-events-none z-0"></div>
+    <div class="fixed bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-blue-600/5 rounded-full blur-[150px] pointer-events-none z-0"></div>
 
-    <aside class="sidebar bg-dark-950/80 backdrop-blur-xl p-6 flex flex-col justify-between shadow-2xl">
-        <div>
-            <div class="flex items-center gap-3 mb-12 px-2 mt-4 cursor-pointer hover:scale-105 transition-transform">
-                <div class="w-10 h-10 bg-brand rounded-xl flex items-center justify-center text-dark-950 font-black text-xl shadow-[0_0_20px_rgba(0,255,163,0.4)]">IF</div>
-                <span class="text-2xl font-black tracking-tight text-white">Invest<span class="text-brand">Flow</span></span>
-            </div>
+    <?php require_once 'sidebar.php'; ?>
+
+    <main class="main-content relative z-10 w-full">
+        <div class="content-wrapper">
             
-            <nav class="space-y-2">
-                <a href="dashboard.php" class="nav-link flex items-center gap-3 text-gray-400 py-3 px-4 rounded-xl transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-                    Resumen General
-                </a>
-                <a href="inversiones.php" class="nav-link flex items-center gap-3 text-gray-400 py-3 px-4 rounded-xl transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                    Mis Inversiones
-                </a>
-                <a href="hipotecas.php" class="nav-active flex items-center gap-3 py-3 px-4 rounded-xl transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                    Simulador Hipotecario
-                </a>
-                <a href="planificador.php" class="nav-link flex items-center gap-3 text-gray-400 py-3 px-4 rounded-xl transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                    Planificador
-                </a>
-                <a href="libertad.php" class="nav-link flex items-center gap-3 text-gray-400 py-3 px-4 rounded-xl transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                    Libertad Financiera
-                </a>
-                <div class="h-px bg-white/5 my-2"></div>
-                
-                <a href="ayuda.php" class="nav-link flex items-center gap-3 text-gray-400 py-3 px-4 rounded-xl transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    Centro de Ayuda
-                </a>
-            </nav>
-        </div>
-
-        <div class="border-t border-white/5 pt-6">
-            <div class="flex items-center gap-3 px-4 mb-4">
-                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-brand to-blue-500 flex items-center justify-center font-black text-dark-950">
-                    <?php echo strtoupper(substr($_SESSION['nombre'], 0, 1)); ?>
-                </div>
+            <header class="mb-12 flex justify-between items-end">
                 <div>
-                    <p class="text-sm font-bold text-white leading-tight"><?php echo htmlspecialchars($_SESSION['nombre']); ?></p>
-                    <p class="text-[10px] text-gray-500 uppercase tracking-widest">Usuario Pro</p>
-                </div>
-            </div>
-            <a href="logout.php" class="logout-btn flex items-center justify-center gap-2 text-gray-400 border border-white/5 transition-all py-3 rounded-xl font-bold text-sm">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                Cerrar Sesión
-            </a>
-        </div>
-    </aside>
-
-    <main class="main-content flex-1 relative z-10">
-        
-        <header class="mb-12 flex justify-between items-end">
-            <div>
-                <p class="text-brand text-xs font-black uppercase tracking-widest mb-2 flex items-center gap-2">
-                    <span class="w-2 h-2 bg-brand rounded-full animate-pulse shadow-[0_0_8px_#00ffa3]"></span>
-                    Simulador Inteligente
-                </p>
-                <h1 class="text-5xl font-black tracking-tight text-white">
-                    Préstamos y Amortización
-                </h1>
-            </div>
-            
-            <div class="hidden lg:flex items-center gap-3 glass-panel px-4 py-2 rounded-xl border border-brand/30 bg-brand/5 shadow-[0_0_15px_rgba(0,255,163,0.1)]">
-                <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
-                <div>
-                    <p class="text-[9px] text-gray-400 font-black uppercase tracking-widest">Motor Backend Activo</p>
-                    <p class="font-mono text-xs text-brand font-bold">MisFinanzasApp.jar (Java Core)</p>
-                </div>
-            </div>
-        </header>
-
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            
-            <div class="lg:col-span-5 glass-panel p-10 rounded-[2.5rem] shadow-2xl flex flex-col justify-center space-y-12">
-                <div class="flex items-center gap-3 border-b border-white/5 pb-4">
-                    <div class="w-8 h-8 rounded bg-dark-800 flex items-center justify-center border border-white/10">
-                        <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
-                    </div>
-                    <h3 class="text-sm font-black text-gray-400 uppercase tracking-widest">Ajustes del Préstamo</h3>
+                    <p class="text-brand text-xs font-black uppercase tracking-widest mb-2 flex items-center gap-2">
+                        <span class="w-2 h-2 bg-brand rounded-full animate-pulse shadow-[0_0_8px_#00ffa3]"></span>
+                        Simulador Inteligente
+                    </p>
+                    <h1 class="text-5xl font-black tracking-tight text-white">
+                        Préstamos y Amortización
+                    </h1>
                 </div>
                 
-                <div class="space-y-4">
-                    <div class="flex justify-between items-end">
-                        <label class="text-gray-400 font-bold text-sm uppercase tracking-wider">Capital Solicitado</label>
-                        <span class="text-3xl font-black text-white"><span id="txtCap">200.000</span> <span class="text-brand text-lg">€</span></span>
+                <div class="hidden lg:flex items-center gap-3 glass-panel px-4 py-2 rounded-xl border border-brand/30 bg-brand/5 shadow-[0_0_15px_rgba(0,255,163,0.1)]">
+                    <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                    <div>
+                        <p class="text-[9px] text-gray-400 font-black uppercase tracking-widest">Motor Backend Activo</p>
+                        <p class="font-mono text-xs text-brand font-bold">MisFinanzasApp.jar (Java Core)</p>
                     </div>
-                    <input type="range" id="rangeCap" class="w-full" min="10000" max="1000000" step="5000" value="200000" oninput="updateSim()">
                 </div>
+            </header>
 
-                <div class="space-y-4">
-                    <div class="flex justify-between items-end">
-                        <label class="text-gray-400 font-bold text-sm uppercase tracking-wider">Interés Anual (TIN)</label>
-                        <span class="text-3xl font-black text-white"><span id="txtInt">3.5</span> <span class="text-brand text-lg">%</span></span>
-                    </div>
-                    <input type="range" id="rangeInt" class="w-full" min="0.1" max="15" step="0.1" value="3.5" oninput="updateSim()">
-                </div>
-
-                <div class="space-y-4">
-                    <div class="flex justify-between items-end">
-                        <label class="text-gray-400 font-bold text-sm uppercase tracking-wider">Plazo de Devolución</label>
-                        <span class="text-3xl font-black text-white"><span id="txtAnn">25</span> <span class="text-brand text-lg">Años</span></span>
-                    </div>
-                    <input type="range" id="rangeAnn" class="w-full" min="1" max="40" step="1" value="25" oninput="updateSim()">
-                </div>
-            </div>
-
-            <div class="lg:col-span-7 space-y-6 flex flex-col">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 
-                <div class="glass-panel p-10 rounded-[2.5rem] bg-gradient-to-br from-brand/10 to-transparent border-brand/20 relative overflow-hidden group">
-                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-brand/20 blur-3xl rounded-full group-hover:bg-brand/30 transition-all"></div>
-                    <p class="text-brand font-black uppercase text-xs tracking-widest mb-2 opacity-80">Cuota Mensual Estimada</p>
-                    <h2 class="text-7xl font-black text-white tracking-tighter" id="totalCuota">0,00 <span class="text-4xl text-brand">€</span></h2>
-                </div>
-
-                <div class="glass-panel p-8 rounded-[2.5rem] flex-grow flex flex-col md:flex-row items-center gap-10">
-                    
-                    <div class="relative w-48 h-48 flex-shrink-0 flex items-center justify-center">
-                        <canvas id="mortgageChart"></canvas>
-                        <div class="absolute inset-0 m-auto w-32 h-32 rounded-full border border-white/5 flex items-center justify-center flex-col">
-                            <span class="text-[9px] text-gray-500 font-bold uppercase tracking-widest">Distribución</span>
+                <div class="lg:col-span-5 glass-panel p-10 rounded-[2.5rem] shadow-2xl flex flex-col justify-center space-y-12">
+                    <div class="flex items-center gap-3 border-b border-white/5 pb-4">
+                        <div class="w-8 h-8 rounded bg-dark-800 flex items-center justify-center border border-white/10">
+                            <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
                         </div>
+                        <h3 class="text-sm font-black text-gray-400 uppercase tracking-widest">Ajustes del Préstamo</h3>
                     </div>
                     
-                    <div class="flex-1 space-y-4 w-full">
-                        <div class="p-5 bg-dark-950/50 rounded-2xl border border-white/5 hover:border-brand/30 transition-colors">
-                            <p class="text-[10px] text-gray-500 font-black uppercase mb-1 tracking-widest">Total a pagar al banco</p>
-                            <p class="text-2xl font-black text-white" id="resTotal">0 €</p>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-end">
+                            <label class="text-gray-400 font-bold text-sm uppercase tracking-wider">Capital Solicitado</label>
+                            <span class="text-3xl font-black text-white"><span id="txtCap">200.000</span> <span class="text-brand text-lg">€</span></span>
                         </div>
-                        <div class="p-5 bg-dark-950/50 rounded-2xl border border-white/5 hover:border-red-500/30 transition-colors">
-                            <p class="text-[10px] text-gray-500 font-black uppercase mb-1 tracking-widest">Intereses generados</p>
-                            <p class="text-2xl font-black text-red-400" id="resInt">0 €</p>
-                        </div>
+                        <input type="range" id="rangeCap" class="w-full" min="10000" max="1000000" step="5000" value="200000" oninput="updateSim()">
                     </div>
 
-                </div>
-            </div>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-end">
+                            <label class="text-gray-400 font-bold text-sm uppercase tracking-wider">Interés Anual (TIN)</label>
+                            <span class="text-3xl font-black text-white"><span id="txtInt">3.5</span> <span class="text-brand text-lg">%</span></span>
+                        </div>
+                        <input type="range" id="rangeInt" class="w-full" min="0.1" max="15" step="0.1" value="3.5" oninput="updateSim()">
+                    </div>
 
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-end">
+                            <label class="text-gray-400 font-bold text-sm uppercase tracking-wider">Plazo de Devolución</label>
+                            <span class="text-3xl font-black text-white"><span id="txtAnn">25</span> <span class="text-brand text-lg">Años</span></span>
+                        </div>
+                        <input type="range" id="rangeAnn" class="w-full" min="1" max="40" step="1" value="25" oninput="updateSim()">
+                    </div>
+                </div>
+
+                <div class="lg:col-span-7 space-y-6 flex flex-col">
+                    
+                    <div class="glass-panel p-10 rounded-[2.5rem] bg-gradient-to-br from-brand/10 to-transparent border-brand/20 relative overflow-hidden group">
+                        <div class="absolute -right-10 -top-10 w-40 h-40 bg-brand/20 blur-3xl rounded-full group-hover:bg-brand/30 transition-all"></div>
+                        <p class="text-brand font-black uppercase text-xs tracking-widest mb-2 opacity-80">Cuota Mensual Estimada</p>
+                        <h2 class="text-7xl font-black text-white tracking-tighter" id="totalCuota">0,00 <span class="text-4xl text-brand">€</span></h2>
+                    </div>
+
+                    <div class="glass-panel p-8 rounded-[2.5rem] flex-grow flex flex-col md:flex-row items-center gap-10">
+                        
+                        <div class="relative w-48 h-48 flex-shrink-0 flex items-center justify-center">
+                            <canvas id="mortgageChart"></canvas>
+                            <div class="absolute inset-0 m-auto w-32 h-32 rounded-full border border-white/5 flex items-center justify-center flex-col">
+                                <span class="text-[9px] text-gray-500 font-bold uppercase tracking-widest">Distribución</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex-1 space-y-4 w-full">
+                            <div class="p-5 bg-dark-950/50 rounded-2xl border border-white/5 hover:border-brand/30 transition-colors">
+                                <p class="text-[10px] text-gray-500 font-black uppercase mb-1 tracking-widest">Total a pagar al banco</p>
+                                <p class="text-2xl font-black text-white" id="resTotal">0 €</p>
+                            </div>
+                            <div class="p-5 bg-dark-950/50 rounded-2xl border border-white/5 hover:border-red-500/30 transition-colors">
+                                <p class="text-[10px] text-gray-500 font-black uppercase mb-1 tracking-widest">Intereses generados</p>
+                                <p class="text-2xl font-black text-red-400" id="resInt">0 €</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
         </div>
+
+        <?php require_once 'footer.php'; ?>
     </main>
 
     <script>
@@ -245,7 +198,6 @@ if (!isset($_SESSION['usuario_id'])) {
             fetch(`calcularHipoteca.php?cap=${cap}&int=${inte}&ann=${ann}`)
                 .then(r => r.text())
                 .then(resultado => {
-                    // Limpiamos el resultado y reemplazamos comas por puntos por si Java devuelve formato español
                     const cuotaLimpia = resultado.trim().replace(',', '.');
                     const cuota = parseFloat(cuotaLimpia);
                     
@@ -271,7 +223,6 @@ if (!isset($_SESSION['usuario_id'])) {
         function renderChart(capital, intereses) {
             const ctx = document.getElementById('mortgageChart').getContext('2d');
             
-            // Forzar tipografía
             Chart.defaults.font.family = "'Outfit', sans-serif";
             
             if (myChart) myChart.destroy();
@@ -282,14 +233,14 @@ if (!isset($_SESSION['usuario_id'])) {
                     labels: ['Capital Prestado', 'Intereses Generados'],
                     datasets: [{
                         data: [capital, intereses],
-                        backgroundColor: ['#00ffa3', '#ef4444'], // Verde Neón y Rojo Peligro
+                        backgroundColor: ['#00ffa3', '#ef4444'],
                         borderWidth: 2,
                         borderColor: '#030712',
                         hoverOffset: 10
                     }]
                 },
                 options: {
-                    cutout: '80%', // Anillo muy fino y moderno
+                    cutout: '80%',
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: { 
@@ -316,7 +267,6 @@ if (!isset($_SESSION['usuario_id'])) {
             });
         }
 
-        // Cargar por primera vez
         window.onload = updateSim;
     </script>
 </body>
