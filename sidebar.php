@@ -1,57 +1,64 @@
 <?php
-// Obtenemos el nombre del archivo actual para saber qué botón debe "crecer"
+// sidebar.php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+require_once 'conexion.php';
+
 $current_page = basename($_SERVER['PHP_SELF']);
+$uid = $_SESSION['usuario_id'] ?? 0;
 $nombre_usuario = $_SESSION['nombre'] ?? 'Usuario';
 $inicial = strtoupper(substr($nombre_usuario, 0, 1));
+
+// CONSULTA DIRECTA A LA BBDD PARA LA FOTO
+$avatar_db = 'default.png';
+if ($uid > 0) {
+    $stmt_side = $conexion->prepare("SELECT avatar FROM usuarios WHERE id = ?");
+    $stmt_side->execute([$uid]);
+    $user_side = $stmt_side->fetch();
+    if ($user_side && !empty($user_side['avatar'])) {
+        $avatar_db = $user_side['avatar'];
+    }
+}
+
+$foto_sidebar = ($avatar_db != 'default.png') 
+                ? 'uploads/' . $avatar_db 
+                : 'https://ui-avatars.com/api/?name='.urlencode($nombre_usuario).'&background=00ffa3&color=030712&bold=true';
 ?>
 
 <style>
-    /* CSS Mágico para el menú Nivel 10 */
+    /* CSS original para el menú interactivo */
     .sidebar-link {
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Efecto de rebote súper suave */
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         position: relative;
     }
-    
-    /* Efecto al pasar el ratón (Hover) en los inactivos */
     .sidebar-link:hover:not(.is-active) {
-        transform: translateX(12px); /* Se desplaza a la derecha */
+        transform: translateX(12px);
         background: rgba(255, 255, 255, 0.03);
         color: #00ffa3;
     }
-
-    /* Efecto del botón ACTIVO (La página actual) */
     .is-active {
         background: linear-gradient(90deg, rgba(0,255,163,0.15) 0%, rgba(0,255,163,0) 100%);
         color: #00ffa3;
         border-left: 4px solid #00ffa3;
         font-weight: 900;
-        transform: scale(1.08) translateX(8px); /* AQUÍ ESTÁ EL TRUCO: Lo hace un 8% más grande */
+        transform: scale(1.08) translateX(8px);
         box-shadow: -5px 0 25px rgba(0, 255, 163, 0.2);
     }
-
-    /* Hace que el icono del botón activo brille */
-    .is-active svg {
-        filter: drop-shadow(0 0 8px rgba(0, 255, 163, 0.8));
-    }
-    
-    /* Personalización del scroll oculto para que quede limpio */
+    .is-active svg { filter: drop-shadow(0 0 8px rgba(0, 255, 163, 0.8)); }
     .sidebar-scroll::-webkit-scrollbar { width: 4px; }
     .sidebar-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
 </style>
 
 <aside class="sidebar bg-dark-950/95 backdrop-blur-2xl flex flex-col justify-between shadow-[10px_0_40px_rgba(0,0,0,0.5)] border-r border-white/5 w-[280px] h-screen fixed z-50 left-0 top-0 pt-8 pb-0">
     
-    <!-- Logo y Título -->
     <div class="px-8 mb-8">
         <div class="flex items-center gap-3 cursor-pointer group transition-transform duration-300 hover:scale-105">
-            <div class="w-11 h-11 bg-brand rounded-xl flex items-center justify-center text-dark-950 font-black text-2xl shadow-[0_0_20px_rgba(0,255,163,0.4)] group-hover:shadow-[0_0_30px_rgba(0,255,163,0.6)] transition-all">
-                IF
-            </div>
+            <div class="w-11 h-11 bg-brand rounded-xl flex items-center justify-center text-dark-950 font-black text-2xl shadow-[0_0_20px_rgba(0,255,163,0.4)]">IF</div>
             <span class="text-3xl font-black tracking-tight text-white">Invest<span class="text-brand">Flow</span></span>
         </div>
     </div>
     
-    <!-- Menú de Navegación -->
     <nav class="flex-1 overflow-y-auto overflow-x-hidden px-4 space-y-2 sidebar-scroll">
         <a href="dashboard.php" class="sidebar-link <?= $current_page == 'dashboard.php' ? 'is-active' : 'text-gray-400' ?> flex items-center gap-4 py-3.5 px-4 rounded-r-2xl mr-2">
             <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2h-2a2 2 0 01-2-2v-2z"></path></svg>
@@ -86,27 +93,27 @@ $inicial = strtoupper(substr($nombre_usuario, 0, 1));
         </a>
     </nav>
 
-    <!-- Perfil del Usuario y Logout -->
     <div class="p-6 border-t border-white/5 bg-dark-900/50 relative overflow-hidden">
-        <!-- Detalle de luz de fondo para la caja del perfil -->
         <div class="absolute -bottom-10 -right-10 w-24 h-24 bg-brand/10 blur-xl rounded-full"></div>
         
-        <div class="flex items-center gap-3 mb-5 relative z-10">
-            <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-brand to-cyan-500 flex items-center justify-center font-black text-dark-950 text-xl shadow-[0_0_15px_rgba(0,255,163,0.3)]">
-                <?= $inicial ?>
+        <a href="ajustes.php" class="flex items-center gap-3 mb-5 relative z-10 group cursor-pointer">
+            <div class="w-12 h-12 rounded-xl overflow-hidden bg-gradient-to-tr from-brand to-cyan-500 flex items-center justify-center font-black text-dark-950 text-xl shadow-[0_0_15px_rgba(0,255,163,0.3)]">
+                <?php if ($avatar_db != 'default.png'): ?>
+                    <img src="<?= $foto_sidebar ?>" class="w-full h-full object-cover">
+                <?php else: ?>
+                    <?= $inicial ?>
+                <?php endif; ?>
             </div>
-            <div>
-                <p class="text-sm font-bold text-white leading-tight truncate w-32"><?= htmlspecialchars($nombre_usuario) ?></p>
+            
+            <div class="transition-transform group-hover:translate-x-1">
+                <p class="text-sm font-bold text-white leading-tight truncate w-32 group-hover:text-brand transition-colors"><?= htmlspecialchars($nombre_usuario) ?></p>
                 <div class="flex items-center gap-1 mt-0.5">
                     <span class="w-1.5 h-1.5 rounded-full bg-brand shadow-[0_0_5px_#00ffa3]"></span>
-                    <p class="text-[9px] text-gray-400 uppercase tracking-widest font-bold">Pro Plan Activo</p>
+                    <p class="text-[9px] text-gray-400 uppercase tracking-widest font-bold">Ajustes de Cuenta</p>
                 </div>
             </div>
-        </div>
-        
-        <a href="logout.php" class="group flex items-center justify-center gap-2 text-gray-400 bg-white/5 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/30 border border-white/5 transition-all duration-300 py-3 rounded-xl font-bold text-sm relative z-10">
-            <svg class="w-4 h-4 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-            Cerrar Sesión
         </a>
+        
+        <a href="logout.php" class="flex items-center justify-center gap-2 text-gray-400 bg-white/5 border border-white/5 py-3 rounded-xl font-bold text-sm hover:text-red-400 hover:bg-red-500/10 transition-all">Cerrar Sesión</a>
     </div>
 </aside>
