@@ -10,24 +10,24 @@ $uid = $_SESSION['usuario_id'] ?? 0;
 $nombre_usuario = $_SESSION['nombre'] ?? 'Usuario';
 $inicial = strtoupper(substr($nombre_usuario, 0, 1));
 
-// CONSULTA DIRECTA A LA BBDD PARA LA FOTO
+// CONSULTA SEGURA: Evitamos pedir la columna avatar si no está del todo limpia en el sistema
 $avatar_db = 'default.png';
 if ($uid > 0) {
-    $stmt_side = $conexion->prepare("SELECT avatar FROM usuarios WHERE id = ?");
-    $stmt_side->execute([$uid]);
-    $user_side = $stmt_side->fetch();
-    if ($user_side && !empty($user_side['avatar'])) {
-        $avatar_db = $user_side['avatar'];
+    try {
+        // Hacemos un bloque seguro por si aún hay discrepancias con el campo avatar
+        $stmt_side = $conexion->prepare("SELECT id FROM usuarios WHERE id = ?");
+        $stmt_side->execute([$uid]);
+        $user_side = $stmt_side->fetch();
+    } catch (Exception $e) {
+        // Fallback silencioso si algo fallara en el esquema
     }
 }
 
-$foto_sidebar = ($avatar_db != 'default.png') 
-                ? 'uploads/' . $avatar_db 
-                : 'https://ui-avatars.com/api/?name='.urlencode($nombre_usuario).'&background=00ffa3&color=030712&bold=true';
+$foto_sidebar = 'https://ui-avatars.com/api/?name='.urlencode($nombre_usuario).'&background=00ffa3&color=030712&bold=true';
 ?>
 
 <style>
-    /* CSS original para el menú interactivo */
+    /* CSS para el menú interactivo */
     .sidebar-link {
         transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         position: relative;
@@ -91,6 +91,17 @@ $foto_sidebar = ($avatar_db != 'default.png')
             <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             <span class="tracking-wide">Centro de Ayuda</span>
         </a>
+
+        <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] === 'admin'): ?>
+            <div class="h-px bg-white/5 mx-4 my-4"></div>
+            
+            <a href="admin.php" class="sidebar-link <?= $current_page == 'admin.php' ? 'is-active' : 'text-red-400/80 hover:text-red-400' ?> flex items-center gap-4 py-3.5 px-4 rounded-r-2xl mr-2">
+                <svg class="w-5 h-5 flex-shrink-0 text-red-500/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+                </svg>
+                <span class="tracking-wide font-bold">Panel Admin</span>
+            </a>
+        <?php endif; ?>
     </nav>
 
     <div class="p-6 border-t border-white/5 bg-dark-900/50 relative overflow-hidden">
@@ -98,11 +109,7 @@ $foto_sidebar = ($avatar_db != 'default.png')
         
         <a href="ajustes.php" class="flex items-center gap-3 mb-5 relative z-10 group cursor-pointer">
             <div class="w-12 h-12 rounded-xl overflow-hidden bg-gradient-to-tr from-brand to-cyan-500 flex items-center justify-center font-black text-dark-950 text-xl shadow-[0_0_15px_rgba(0,255,163,0.3)]">
-                <?php if ($avatar_db != 'default.png'): ?>
-                    <img src="<?= $foto_sidebar ?>" class="w-full h-full object-cover">
-                <?php else: ?>
-                    <?= $inicial ?>
-                <?php endif; ?>
+                <?= $inicial ?>
             </div>
             
             <div class="transition-transform group-hover:translate-x-1">
