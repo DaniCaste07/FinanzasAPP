@@ -9,8 +9,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
 
     try {
-        // Buscamos al usuario por email usando sentencias preparadas de PDO
-        $stmt = $conexion->prepare("SELECT id, nombre, password FROM usuarios WHERE email = ?");
+        // CORRECCIÓN 1: Añadimos 'rol' a la consulta SQL para sacarlo de la base de datos
+        $stmt = $conexion->prepare("SELECT id, nombre, password, rol FROM usuarios WHERE email = ?");
         $stmt->execute([$email]);
         $usuario = $stmt->fetch();
 
@@ -18,6 +18,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Login exitoso: Guardamos datos en la sesión
             $_SESSION['usuario_id'] = $usuario['id'];
             $_SESSION['nombre'] = $usuario['nombre'];
+            
+            // CORRECCIÓN 2: Guardamos el rol en la maleta de PHP para que el sidebar lo lea
+            $_SESSION['rol'] = $usuario['rol'];
             
             header("Location: dashboard.php");
             exit();
