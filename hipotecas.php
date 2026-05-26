@@ -21,6 +21,7 @@ if (!isset($_SESSION['usuario_id'])) {
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
     
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         tailwind.config = {
@@ -34,49 +35,7 @@ if (!isset($_SESSION['usuario_id'])) {
                     fontFamily: { sans: ['Outfit', 'sans-serif'] }
                 }
             }
-        }
     </script>
-    <style>
-        body { background-color: #030712; font-family: 'Outfit', sans-serif; overflow-x: hidden; }
-        .sidebar { width: 280px; height: 100vh; position: fixed; border-right: 1px solid rgba(255,255,255,0.05); z-index: 50; }
-        .main-content { margin-left: 280px; min-height: 100vh; display: flex; flex-direction: column; }
-        .content-wrapper { padding: 40px; flex-grow: 1; }
-        
-        .glass-panel { 
-            background: rgba(17, 24, 39, 0.6); 
-            backdrop-filter: blur(16px); 
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.05); 
-        }
-        
-        .logout-btn:hover { color: #ef4444 !important; background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.2); }
-        .nav-link { transition: all 0.3s ease; }
-        .nav-link:hover { padding-left: 1.5rem; background: rgba(255,255,255,0.03); color: #00ffa3; }
-        .nav-active { background: rgba(0,255,163,0.1); color: #00ffa3; border-left: 4px solid #00ffa3; font-weight: 800; }
-
-        /* Sliders Neón Personalizados */
-        input[type=range] { 
-            -webkit-appearance: none; 
-            background: rgba(255,255,255,0.05); 
-            height: 8px; 
-            border-radius: 8px; 
-            outline: none;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        input[type=range]::-webkit-slider-thumb { 
-            -webkit-appearance: none; 
-            height: 24px; 
-            width: 24px; 
-            border-radius: 50%; 
-            background: #00ffa3; 
-            cursor: pointer; 
-            box-shadow: 0 0 15px rgba(0, 255, 163, 0.6); 
-            transition: transform 0.1s;
-        }
-        input[type=range]::-webkit-slider-thumb:hover {
-            transform: scale(1.2);
-        }
-    </style>
 </head>
 <body class="text-gray-100 flex relative">
 
@@ -99,13 +58,7 @@ if (!isset($_SESSION['usuario_id'])) {
                     </h1>
                 </div>
                 
-                <div class="hidden lg:flex items-center gap-3 glass-panel px-4 py-2 rounded-xl border border-brand/30 bg-brand/5 shadow-[0_0_15px_rgba(0,255,163,0.1)]">
-                    <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
-                    <div>
-                        <p class="text-[9px] text-gray-400 font-black uppercase tracking-widest">Motor Backend Activo</p>
-                        <p class="font-mono text-xs text-brand font-bold">MisFinanzasApp.jar (Java Core)</p>
-                    </div>
-                </div>
+                
             </header>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">

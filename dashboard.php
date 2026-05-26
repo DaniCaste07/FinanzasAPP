@@ -116,6 +116,7 @@ $glowBeneficio = $beneficioGlobal >= 0 ? 'shadow-[0_0_30px_rgba(0,255,163,0.15)]
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
     
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         tailwind.config = {
@@ -131,24 +132,6 @@ $glowBeneficio = $beneficioGlobal >= 0 ? 'shadow-[0_0_30px_rgba(0,255,163,0.15)]
             }
         }
     </script>
-    <style>
-        body { background-color: #030712; font-family: 'Outfit', sans-serif; overflow-x: hidden; }
-        .sidebar { width: 280px; height: 100vh; position: fixed; border-right: 1px solid rgba(255,255,255,0.05); z-index: 50; }
-        .main-content { margin-left: 280px; min-height: 100vh; display: flex; flex-direction: column; }
-        .content-wrapper { padding: 40px; flex-grow: 1; }
-        
-        .glass-panel { 
-            background: rgba(17, 24, 39, 0.6); 
-            backdrop-filter: blur(16px); 
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.05); 
-        }
-        
-        .logout-btn:hover { color: #ef4444 !important; background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.2); }
-        .nav-link { transition: all 0.3s ease; }
-        .nav-link:hover { padding-left: 1.5rem; background: rgba(255,255,255,0.03); color: #00ffa3; }
-        .nav-active { background: rgba(0,255,163,0.1); color: #00ffa3; border-left: 4px solid #00ffa3; font-weight: 800; }
-    </style>
 </head>
 <body class="text-gray-100 flex relative">
 
@@ -163,7 +146,7 @@ $glowBeneficio = $beneficioGlobal >= 0 ? 'shadow-[0_0_30px_rgba(0,255,163,0.15)]
                 <div>
                     <p class="text-brand text-xs font-black uppercase tracking-widest mb-2 flex items-center gap-2">
                         <span class="w-2 h-2 bg-brand rounded-full animate-pulse shadow-[0_0_8px_#00ffa3]"></span>
-                        Terminal Operativo Activo
+                        Terminal
                     </p>
                     <h1 class="text-5xl font-black tracking-tight text-white">Panel General</h1>
                 </div>

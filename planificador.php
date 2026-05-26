@@ -20,6 +20,7 @@ if (!isset($_SESSION['usuario_id'])) {
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
     
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         tailwind.config = {
@@ -35,68 +36,6 @@ if (!isset($_SESSION['usuario_id'])) {
             }
         }
     </script>
-    <style>
-        body { background-color: #030712; font-family: 'Outfit', sans-serif; overflow-x: hidden; }
-        .main-content { margin-left: 280px; min-height: 100vh; display: flex; flex-direction: column; }
-        .content-wrapper { padding: 40px; flex-grow: 1; }
-        
-        .glass-panel { 
-            background: rgba(17, 24, 39, 0.6); 
-            backdrop-filter: blur(16px); 
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.05); 
-        }
-
-        /* Sliders Neón Generales (Verdes) */
-        input[type=range] { 
-            -webkit-appearance: none; 
-            background: rgba(255,255,255,0.05); 
-            height: 8px; 
-            border-radius: 8px; 
-            outline: none;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        input[type=range]::-webkit-slider-thumb { 
-            -webkit-appearance: none; 
-            height: 24px; 
-            width: 24px; 
-            border-radius: 50%; 
-            background: #00ffa3; 
-            cursor: pointer; 
-            box-shadow: 0 0 15px rgba(0, 255, 163, 0.6); 
-            transition: transform 0.1s;
-        }
-        input[type=range]::-moz-range-thumb {
-            background: #00ffa3; 
-            box-shadow: 0 0 15px rgba(0, 255, 163, 0.6); 
-            border: none;
-            height: 24px; 
-            width: 24px; 
-            border-radius: 50%;
-            cursor: pointer;
-            transition: transform 0.1s;
-        }
-        input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
-        input[type=range]::-moz-range-thumb:hover { transform: scale(1.2); }
-
-        /* Sliders Morados para la pestaña FIRE */
-        input[type=range].slider-purple::-webkit-slider-thumb { 
-            background: #a855f7; 
-            box-shadow: 0 0 15px rgba(168, 85, 247, 0.6); 
-        }
-        input[type=range].slider-purple::-moz-range-thumb { 
-            background: #a855f7; 
-            box-shadow: 0 0 15px rgba(168, 85, 247, 0.6); 
-        }
-        input[type=range].slider-purple::-webkit-slider-thumb:hover { transform: scale(1.2); }
-        input[type=range].slider-purple::-moz-range-thumb:hover { transform: scale(1.2); }
-        
-        .progress-bar-transition { transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
-        
-        /* Animaciones para las pestañas */
-        .tab-content { display: none; opacity: 0; transition: opacity 0.4s ease-in-out; }
-        .tab-content.active { display: block; opacity: 1; }
-    </style>
 </head>
 <body class="text-gray-100 flex relative">
 
@@ -113,7 +52,7 @@ if (!isset($_SESSION['usuario_id'])) {
                 <div>
                     <p class="text-brand text-xs font-black uppercase tracking-widest mb-2 flex items-center gap-2">
                         <span class="w-2 h-2 bg-brand rounded-full animate-pulse shadow-[0_0_8px_#00ffa3]"></span>
-                        Hub de Proyección
+                        Planificador
                     </p>
                     <h1 class="text-5xl font-black tracking-tight text-white">
                         Planificación Patrimonial

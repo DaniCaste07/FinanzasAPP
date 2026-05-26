@@ -21,6 +21,7 @@ $nombre = $_SESSION['nombre'] ?? 'Usuario';
         <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
 
         <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="stylesheet" href="style.css">
         <script>
             tailwind.config = {
                 darkMode: 'class',
@@ -35,57 +36,6 @@ $nombre = $_SESSION['nombre'] ?? 'Usuario';
                 }
             }
         </script>
-        <style>
-            body {
-                background-color: #030712;
-                font-family: 'Outfit', sans-serif;
-                overflow-x: hidden;
-            }
-            .sidebar {
-                width: 280px;
-                height: 100vh;
-                position: fixed;
-                border-right: 1px solid rgba(255,255,255,0.05);
-                z-index: 50;
-            }
-            .main-content {
-                margin-left: 280px;
-                min-height: 100vh;
-                display: flex;
-                flex-direction: column;
-            }
-            .content-wrapper {
-                padding: 40px;
-                flex-grow: 1;
-            }
-
-            .glass-panel {
-                background: rgba(17, 24, 39, 0.6);
-                backdrop-filter: blur(16px);
-                -webkit-backdrop-filter: blur(16px);
-                border: 1px solid rgba(255, 255, 255, 0.05);
-            }
-
-            .logout-btn:hover {
-                color: #ef4444 !important;
-                background: rgba(239, 68, 68, 0.1);
-                border-color: rgba(239, 68, 68, 0.2);
-            }
-            .nav-link {
-                transition: all 0.3s ease;
-            }
-            .nav-link:hover {
-                padding-left: 1.5rem;
-                background: rgba(255,255,255,0.03);
-                color: #00ffa3;
-            }
-            .nav-active {
-                background: rgba(0,255,163,0.1);
-                color: #00ffa3;
-                border-left: 4px solid #00ffa3;
-                font-weight: 800;
-            }
-        </style>
     </head>
     <body class="text-gray-100 flex relative">
 
@@ -101,20 +51,12 @@ $nombre = $_SESSION['nombre'] ?? 'Usuario';
                     <div>
                         <p class="text-brand text-xs font-black uppercase tracking-widest mb-2 flex items-center gap-2">
                             <span class="w-2 h-2 bg-brand rounded-full animate-pulse shadow-[0_0_8px_#00ffa3]"></span>
-                            Documentación TFG
+                            Documentación
                         </p>
                         <h1 class="text-5xl font-black tracking-tight text-white">
                             Manual del <span class="italic text-transparent bg-clip-text bg-gradient-to-r from-brand to-cyan-400">Sistema</span>
                         </h1>
-                    </div>
-
-                    <div class="hidden lg:flex items-center gap-3 glass-panel px-4 py-2 rounded-xl border border-white/10">
-                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                        <div>
-                            <p class="text-[9px] text-gray-400 font-black uppercase tracking-widest">Versión actual</p>
-                            <p class="font-mono text-xs text-white font-bold">InvestFlow v2.0</p>
-                        </div>
-                    </div>
+                    </div> 
                 </header>
 
 

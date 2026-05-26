@@ -59,6 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crear_noticia'])) {
     <title>InvestFlow - Control de Administración</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -83,18 +84,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crear_noticia'])) {
         <header class="flex justify-between items-center mb-10 border-b border-white/5 pb-6">
             <div>
                 <h1 class="text-4xl font-black tracking-tight text-red-400">Panel de <span class="text-white">Administración</span></h1>
-                <p class="text-gray-400 text-sm mt-1">Nivel de acceso de seguridad: ROOT Corporativo.</p>
+                <p class="text-gray-400 text-sm mt-1">Nivel de acceso de seguridad: Administrador</p>
             </div>
             
-            <div class="flex items-center gap-4 bg-dark-900/60 border border-red-500/20 px-5 py-2 rounded-2xl">
-                <div class="text-right">
-                    <p class="text-xs text-red-400 font-bold uppercase tracking-wider">Modo Root</p>
-                    <p class="text-sm font-black text-white"><?= htmlspecialchars($nombre_usuario) ?></p>
-                </div>
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-red-500 to-amber-500 flex items-center justify-center font-black text-white text-lg shadow-[0_0_15px_rgba(239,68,68,0.3)]">
-                    <?= $inicial ?>
-                </div>
-            </div>
         </header>
 
         <?php if (!empty($mensaje_estado)): ?>
@@ -158,6 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crear_noticia'])) {
             </div>
 
         </div>
+        <?php require_once 'footer.php'; ?>
     </main>
 
 </body>

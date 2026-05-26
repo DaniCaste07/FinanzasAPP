@@ -40,6 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login_btn'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>InvestFlow | Plataforma Financiera</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
@@ -78,51 +79,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login_btn'])) {
             }
         }
     </script>
-    <style>
-        /* AQUÍ ESTÁ EL ARREGLO PRINCIPAL: Permitimos scroll vertical si no cabe */
-        body { background-color: #030712; overflow-x: hidden; } 
-        .glass-panel { 
-            background: rgba(17, 24, 39, 0.4); 
-            backdrop-filter: blur(20px); 
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08); 
-        }
-        .text-glow { text-shadow: 0 0 20px rgba(0, 255, 163, 0.5); }
-        .input-field {
-            background: rgba(3, 7, 18, 0.6);
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .input-field:focus {
-            border-color: #00ffa3;
-            box-shadow: 0 0 15px rgba(0, 255, 163, 0.2);
-            background: rgba(0, 255, 163, 0.02);
-        }
-        
-        /* Ticker Continuo CSS */
-        .ticker-wrap { 
-            width: 100%; 
-            height: 48px; 
-            overflow: hidden; 
-            background: rgba(3, 7, 18, 0.95); 
-            border-bottom: 1px solid rgba(255,255,255,0.05); 
-            display: flex;
-            align-items: center; 
-        }
-        .ticker-content { 
-            display: flex; 
-            align-items: center; 
-            width: max-content;
-            height: 100%;
-        }
-        .ticker-item {
-            display: flex;
-            align-items: center; 
-            padding: 0 2.5rem;
-            height: 100%;
-            white-space: nowrap; 
-        }
-    </style>
 </head>
 <body class="min-h-screen flex flex-col text-gray-100 relative">
 
