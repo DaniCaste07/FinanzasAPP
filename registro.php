@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         // Ejecutamos pasando los datos en un array
         if ($stmt->execute([$nombre, $email, $password])) {
-            $mensaje = "<div class='alert success'>¡Registro con PDO completado! <a href='login.php'>Inicia sesión</a></div>";
+            $mensaje = "<div class='alert success'>¡Registro completado! <a href='login.php'>Inicia sesión</a></div>";
         }
     } catch (PDOException $e) {
         // Si hay un error de "Duplicate entry" para el email

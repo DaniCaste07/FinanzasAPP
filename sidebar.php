@@ -10,20 +10,27 @@ $uid = $_SESSION['usuario_id'] ?? 0;
 $nombre_usuario = $_SESSION['nombre'] ?? 'Usuario';
 $inicial = strtoupper(substr($nombre_usuario, 0, 1));
 
-// CONSULTA SEGURA: Evitamos pedir la columna avatar si no está del todo limpia en el sistema
+// CONSULTA SEGURA: Obtenemos el avatar directamente de la base de datos
 $avatar_db = 'default.png';
 if ($uid > 0) {
     try {
-        // Hacemos un bloque seguro por si aún hay discrepancias con el campo avatar
-        $stmt_side = $conexion->prepare("SELECT id FROM usuarios WHERE id = ?");
+        $stmt_side = $conexion->prepare("SELECT avatar FROM usuarios WHERE id = ?");
         $stmt_side->execute([$uid]);
         $user_side = $stmt_side->fetch();
+        if ($user_side && !empty($user_side['avatar'])) {
+            $avatar_db = $user_side['avatar'];
+        }
     } catch (Exception $e) {
-        // Fallback silencioso si algo fallara en el esquema
+        // Fallback silencioso por si fallara la sincronización del esquema
     }
 }
 
-$foto_sidebar = 'https://ui-avatars.com/api/?name='.urlencode($nombre_usuario).'&background=00ffa3&color=030712&bold=true';
+// Damos prioridad al avatar en la sesión (recién subido) y si no, al de la BBDD
+$avatar_actual = $_SESSION['avatar'] ?? $avatar_db;
+
+$foto_sidebar = (!empty($avatar_actual) && $avatar_actual != 'default.png') 
+               ? 'uploads/' . $avatar_actual 
+               : 'https://ui-avatars.com/api/?name='.urlencode($nombre_usuario).'&background=00ffa3&color=030712&bold=true';
 ?>
 
 <style>
@@ -112,9 +119,7 @@ $foto_sidebar = 'https://ui-avatars.com/api/?name='.urlencode($nombre_usuario).'
         <div class="absolute -bottom-10 -right-10 w-24 h-24 bg-brand/10 blur-xl rounded-full"></div>
         
         <a href="ajustes.php" class="flex items-center gap-3 mb-5 relative z-10 group cursor-pointer">
-            <div class="w-12 h-12 rounded-xl overflow-hidden bg-gradient-to-tr from-brand to-cyan-500 flex items-center justify-center font-black text-dark-950 text-xl shadow-[0_0_15px_rgba(0,255,163,0.3)]">
-                <?= $inicial ?>
-            </div>
+            <img src="<?= $foto_sidebar ?>" class="w-12 h-12 rounded-xl object-cover border border-brand/20 shadow-[0_0_15px_rgba(0,255,163,0.3)] group-hover:border-brand transition-colors">
             
             <div class="transition-transform group-hover:translate-x-1">
                 <p class="text-sm font-bold text-white leading-tight truncate w-32 group-hover:text-brand transition-colors"><?= htmlspecialchars($nombre_usuario) ?></p>
