@@ -60,68 +60,6 @@ if ($monedaUsuario === 'USD') {
             }
         }
     </script>
-    <style>
-        body { background-color: #030712; font-family: 'Outfit', sans-serif; overflow-x: hidden; }
-        .main-content { margin-left: 280px; min-height: 100vh; display: flex; flex-direction: column; }
-        .content-wrapper { padding: 40px; flex-grow: 1; }
-        
-        .glass-panel { 
-            background: rgba(17, 24, 39, 0.6); 
-            backdrop-filter: blur(16px); 
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.05); 
-        }
-
-        /* Sliders Neón Generales (Verdes) */
-        input[type=range] { 
-            -webkit-appearance: none; 
-            background: rgba(255,255,255,0.05); 
-            height: 8px; 
-            border-radius: 8px; 
-            outline: none;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        input[type=range]::-webkit-slider-thumb { 
-            -webkit-appearance: none; 
-            height: 24px; 
-            width: 24px; 
-            border-radius: 50%; 
-            background: #00ffa3; 
-            cursor: pointer; 
-            box-shadow: 0 0 15px rgba(0, 255, 163, 0.6); 
-            transition: transform 0.1s;
-        }
-        input[type=range]::-moz-range-thumb {
-            background: #00ffa3; 
-            box-shadow: 0 0 15px rgba(0, 255, 163, 0.6); 
-            border: none;
-            height: 24px; 
-            width: 24px; 
-            border-radius: 50%;
-            cursor: pointer;
-            transition: transform 0.1s;
-        }
-        input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
-        input[type=range]::-moz-range-thumb:hover { transform: scale(1.2); }
-
-        /* Sliders Morados para la pestaña FIRE */
-        input[type=range].slider-purple::-webkit-slider-thumb { 
-            background: #a855f7; 
-            box-shadow: 0 0 15px rgba(168, 85, 247, 0.6); 
-        }
-        input[type=range].slider-purple::-moz-range-thumb { 
-            background: #a855f7; 
-            box-shadow: 0 0 15px rgba(168, 85, 247, 0.6); 
-        }
-        input[type=range].slider-purple::-webkit-slider-thumb:hover { transform: scale(1.2); }
-        input[type=range].slider-purple::-moz-range-thumb:hover { transform: scale(1.2); }
-        
-        .progress-bar-transition { transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
-        
-        /* Animaciones para las pestañas */
-        .tab-content { display: none; opacity: 0; transition: opacity 0.4s ease-in-out; }
-        .tab-content.active { display: block; opacity: 1; }
-    </style>
 </head>
 <body class="text-gray-100 flex relative">
 
@@ -131,7 +69,7 @@ if ($monedaUsuario === 'USD') {
     <?php require_once 'sidebar.php'; ?>
 
     <main class="main-content relative z-10">
-        <div class="content-wrapper">
+        <div class="content-wrapper planificador-wrapper">
             
             <header class="mb-10 flex justify-between items-end">
                 <div>
@@ -223,7 +161,7 @@ if ($monedaUsuario === 'USD') {
                             </div>
                         </div>
 
-                        <div class="glass-panel p-6 rounded-[2.5rem] flex-grow relative">
+                        <div class="glass-panel p-6 rounded-[2.5rem] flex-grow relative planificador-chart">
                             <h3 class="text-xs font-black text-gray-500 uppercase tracking-widest mb-4 ml-2">Curva de Crecimiento Exponencial</h3>
                             <div class="w-full h-64 relative">
                                 <canvas id="growthChart"></canvas>
