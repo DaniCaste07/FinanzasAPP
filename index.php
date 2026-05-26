@@ -175,8 +175,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login_btn'])) {
 
                         <div>
                             <div class="flex justify-between items-center ml-2 mb-2">
-                                <label class="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em]">Clave de Cifrado</label>
-                                <a href="#" class="text-[10px] text-brand/70 hover:text-brand uppercase font-bold tracking-wider">¿Restablecer?</a>
+                                <label class="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em]">Contraseña</label>
                             </div>
                             <input type="password" name="password" required 
                                    class="input-field w-full px-5 py-4 rounded-2xl text-white outline-none placeholder-gray-600 font-medium" 
@@ -198,7 +197,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login_btn'])) {
             <div class="hidden lg:flex w-7/12 relative h-full min-h-[500px] items-center justify-center">
                 
                 <div class="text-center absolute z-0 opacity-[0.03] pointer-events-none">
-                    <h2 class="text-[14rem] font-black leading-none">TFG</h2>
+                    <h2 class="text-[14rem] font-black leading-none">IF</h2>
                 </div>
 
                 <div class="absolute z-30 glass-panel p-6 rounded-3xl w-72 animate-float -left-8 top-[10%] border-l-4 border-l-brand shadow-2xl">
