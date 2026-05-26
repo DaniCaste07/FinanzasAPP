@@ -9,8 +9,17 @@ if (!isset($_SESSION['usuario_id'])) {
 
 $uid = $_SESSION['usuario_id'];
 
-// Función para obtener precios reales (Binance API con protección anti-cuelgues)
-function getLivePrice($activo) {
+// 1. Obtener preferencias de divisa y privacidad del usuario
+$stmtUser = $conexion->prepare("SELECT moneda, modo_privacidad FROM usuarios WHERE id = ?");
+$stmtUser->execute([$uid]);
+$userPrefs = $stmtUser->fetch();
+
+$monedaUsuario = $userPrefs['moneda'] ?? 'EUR';
+$modoPrivacidad = $userPrefs['modo_privacidad'] ?? 0;
+$simboloMoneda = ($monedaUsuario === 'USD') ? '$' : '€';
+
+// Función para obtener precios de mercado siempre en Euros (Moneda base de la BBDD)
+function getLivePriceEUR($activo) {
     $activo = strtoupper(trim($activo));
     $map = ['BITCOIN' => 'BTCEUR', 'ETHEREUM' => 'ETHEUR', 'SOLANA' => 'SOLEUR', 'APPLE' => 'AAPLUSDT']; 
     $symbol = $map[$activo] ?? $activo . "EUR";
@@ -21,40 +30,73 @@ function getLivePrice($activo) {
     
     if ($response) {
         $data = json_decode($response, true);
-        return isset($data['price']) ? floatval($data['price']) : null;
+        $precio = isset($data['price']) ? floatval($data['price']) : null;
+        
+        // Corrección técnica para acciones americanas como Apple que cotizan en USD de forma nativa en la API
+        if ($symbol === 'AAPLUSDT' && $precio !== null) {
+            $precio = $precio / 1.08; // Conversión inversa provisional a EUR
+        }
+        return $precio;
     }
     return null;
 }
 
-// 1. Obtener todas las inversiones del usuario
+// Función para obtener la tasa de cambio real de Euro a Dólar desde Binance
+function getEURUSDExchangeRate() {
+    $url = "https://api.binance.com/api/v3/ticker/price?symbol=EURUSDT";
+    $ctx = stream_context_create(['http' => ['timeout' => 2]]);
+    $response = @file_get_contents($url, false, $ctx);
+    if ($response) {
+        $data = json_decode($response, true);
+        return isset($data['price']) ? floatval($data['price']) : 1.08;
+    }
+    return 1.08; // Fallback clásico en caso de caída de red
+}
+
+// 2. Obtener todas las inversiones del usuario
 $stmt = $conexion->prepare("SELECT * FROM inversiones WHERE usuario_id = ?");
 $stmt->execute([$uid]);
 $inversiones = $stmt->fetchAll();
 
-$totalInvertido = 0;
-$valorActualTotal = 0;
+$totalInvertidoEUR = 0;
+$valorActualTotalEUR = 0;
 $labels = [];
-$dataChart = [];
+$dataChartEUR = [];
 
-// 2. Calcular métricas globales en tiempo real
+// 3. Procesar y consolidar la contabilidad de la cartera en Euros
 foreach ($inversiones as $inv) {
-    $precioLive = getLivePrice($inv['activo']) ?? $inv['valor_actual'];
+    $precioLiveEUR = getLivePriceEUR($inv['activo']) ?? $inv['valor_actual'];
     
     if ($inv['valor_actual'] > 0) {
-        $valorHoy = ($inv['cantidad_invertida'] * $precioLive) / $inv['valor_actual'];
+        $valorHoyEUR = ($inv['cantidad_invertida'] * $precioLiveEUR) / $inv['valor_actual'];
     } else {
-        $valorHoy = $inv['cantidad_invertida'];
+        $valorHoyEUR = $inv['cantidad_invertida'];
     }
 
-    $totalInvertido += $inv['cantidad_invertida'];
-    $valorActualTotal += $valorHoy;
+    $totalInvertidoEUR += $inv['cantidad_invertida'];
+    $valorActualTotalEUR += $valorHoyEUR;
     
     $labels[] = strtoupper($inv['activo']);
-    $dataChart[] = round($valorHoy, 2);
+    $dataChartEUR[] = $valorHoyEUR;
 }
 
-$beneficioGlobal = $valorActualTotal - $totalInvertido;
-$porcentajeCrecimiento = ($totalInvertido > 0) ? ($beneficioGlobal / $totalInvertido) * 100 : 0;
+$beneficioGlobalEUR = $valorActualTotalEUR - $totalInvertidoEUR;
+$porcentajeCrecimiento = ($totalInvertidoEUR > 0) ? ($beneficioGlobalEUR / $totalInvertidoEUR) * 100 : 0;
+
+// 4. Aplicar el multiplicador cambiario si el usuario solicita ver el sistema en USD
+$tasaCambio = 1.0;
+if ($monedaUsuario === 'USD') {
+    $tasaCambio = getEURUSDExchangeRate();
+}
+
+$valorActualTotal = $valorActualTotalEUR * $tasaCambio;
+$totalInvertido = $totalInvertidoEUR * $tasaCambio;
+$beneficioGlobal = $beneficioGlobalEUR * $tasaCambio;
+
+$dataChart = [];
+foreach ($dataChartEUR as $valorEUR) {
+    $dataChart[] = round($valorEUR * $tasaCambio, 2);
+}
 
 // Variables dinámicas de color para ganancias/pérdidas
 $colorBeneficio = $beneficioGlobal >= 0 ? 'text-brand' : 'text-red-500';
@@ -113,7 +155,6 @@ $glowBeneficio = $beneficioGlobal >= 0 ? 'shadow-[0_0_30px_rgba(0,255,163,0.15)]
     <div class="fixed top-[-20%] left-[-10%] w-[800px] h-[800px] bg-brand/5 rounded-full blur-[150px] pointer-events-none z-0"></div>
     <div class="fixed bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-blue-600/5 rounded-full blur-[150px] pointer-events-none z-0"></div>
 
-    <!-- AQUÍ INCLUIMOS LA BARRA LATERAL MODULAR -->
     <?php require_once 'sidebar.php'; ?>
 
     <main class="main-content relative z-10">
@@ -124,13 +165,7 @@ $glowBeneficio = $beneficioGlobal >= 0 ? 'shadow-[0_0_30px_rgba(0,255,163,0.15)]
                         <span class="w-2 h-2 bg-brand rounded-full animate-pulse shadow-[0_0_8px_#00ffa3]"></span>
                         Terminal Operativo Activo
                     </p>
-                    <h1 class="text-5xl font-black tracking-tight text-white">
-                        Panel General
-                    </h1>
-                </div>
-                <div class="hidden lg:block text-right">
-                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-1">Cifrado AES-256</p>
-                    <p class="font-mono text-sm text-gray-400 bg-dark-900/50 py-1.5 px-3 rounded-lg border border-white/5">IP: SECURE-CONNECTION</p>
+                    <h1 class="text-5xl font-black tracking-tight text-white">Panel General</h1>
                 </div>
             </header>
 
@@ -138,18 +173,31 @@ $glowBeneficio = $beneficioGlobal >= 0 ? 'shadow-[0_0_30px_rgba(0,255,163,0.15)]
                 <div class="glass-panel p-8 rounded-[2rem] relative overflow-hidden group">
                     <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-2xl -mr-10 -mt-10 group-hover:bg-white/10 transition-colors"></div>
                     <p class="text-gray-400 text-[10px] font-black uppercase tracking-widest mb-2">Patrimonio Neto Estimado</p>
-                    <h2 class="text-4xl font-black text-white"><?php echo number_format($valorActualTotal, 2, ',', '.'); ?> <span class="text-brand text-2xl">€</span></h2>
+                    <h2 class="text-4xl font-black text-white">
+                        <?php echo $modoPrivacidad ? '••••••' : number_format($valorActualTotal, 2, ',', '.'); ?> 
+                        <span class="text-brand text-2xl"><?= $simboloMoneda ?></span>
+                    </h2>
                 </div>
 
                 <div class="glass-panel p-8 rounded-[2rem] relative overflow-hidden">
                     <p class="text-gray-400 text-[10px] font-black uppercase tracking-widest mb-2">Total Invertido</p>
-                    <h2 class="text-4xl font-black text-gray-300"><?php echo number_format($totalInvertido, 2, ',', '.'); ?> <span class="text-gray-500 text-2xl">€</span></h2>
+                    <h2 class="text-4xl font-black text-gray-300">
+                        <?php echo $modoPrivacidad ? '••••••' : number_format($totalInvertido, 2, ',', '.'); ?> 
+                        <span class="text-gray-500 text-2xl"><?= $simboloMoneda ?></span>
+                    </h2>
                 </div>
 
                 <div class="glass-panel p-8 rounded-[2rem] border bg-gradient-to-br <?php echo $bgBeneficio; ?> <?php echo $glowBeneficio; ?> relative overflow-hidden">
                     <p class="<?php echo $colorBeneficio; ?> text-[10px] font-black uppercase tracking-widest mb-2 opacity-80">Rendimiento Total</p>
                     <h2 class="text-4xl font-black <?php echo $colorBeneficio; ?>">
-                        <?php echo ($beneficioGlobal >= 0 ? '+' : '') . number_format($beneficioGlobal, 2, ',', '.'); ?> <span class="text-2xl">€</span>
+                        <?php 
+                        if ($modoPrivacidad) {
+                            echo "••••••";
+                        } else {
+                            echo ($beneficioGlobal >= 0 ? '+' : '') . number_format($beneficioGlobal, 2, ',', '.'); 
+                        }
+                        ?> 
+                        <span class="text-2xl"><?= $simboloMoneda ?></span>
                     </h2>
                     <div class="mt-2 flex items-center gap-2">
                         <span class="text-xs font-black uppercase px-2 py-1 rounded bg-dark-950/50 <?php echo $colorBeneficio; ?>">
@@ -211,12 +259,8 @@ $glowBeneficio = $beneficioGlobal >= 0 ? 'shadow-[0_0_30px_rgba(0,255,163,0.15)]
                                     <span class="font-bold text-gray-300">Recomendación:</span> Históricamente, las ventas en pánico consolidan las pérdidas. Revisa el estado de la red en la pestaña <em>Mis Inversiones</em> y evalúa si los fundamentales técnicos de tus activos han cambiado.
                                 </p>
                             <?php else: ?>
-                                <p class="text-white text-sm leading-relaxed font-medium">
-                                    El sistema está a la espera de datos.
-                                </p>
-                                <p class="text-gray-400 text-xs leading-relaxed mt-4">
-                                    Ingresa datos en tu cartera para que el motor algorítmico pueda calcular tu rendimiento, dibujar las proyecciones y emitir consejos personalizados.
-                                </p>
+                                <p class="text-white text-sm leading-relaxed font-medium">El sistema está a la espera de datos.</p>
+                                <p class="text-gray-400 text-xs leading-relaxed mt-4">Ingresa datos en tu cartera para que el motor algorítmico pueda calcular tu rendimiento, dibujar las proyecciones y emitir consejos personalizados.</p>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -224,7 +268,6 @@ $glowBeneficio = $beneficioGlobal >= 0 ? 'shadow-[0_0_30px_rgba(0,255,163,0.15)]
             </div>
         </div>
 
-        <!-- AQUÍ INCLUIMOS EL FOOTER MODULAR Y EL BOT DE IA -->
         <?php require_once 'footer.php'; ?>
     </main>
 
@@ -266,7 +309,8 @@ $glowBeneficio = $beneficioGlobal >= 0 ? 'shadow-[0_0_30px_rgba(0,255,163,0.15)]
                                 let label = context.label || '';
                                 if (label) { label += ': '; }
                                 if (context.parsed !== null) {
-                                    label += new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(context.parsed);
+                                    // Sincronización de Chart.js con la divisa dinámica del usuario
+                               label += new Intl.NumberFormat('es-ES', { style: 'currency', currency: '<?= $monedaUsuario ?>' }).format(context.parsed);
                                 }
                                 return label;
                             }
