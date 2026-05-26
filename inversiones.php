@@ -3,7 +3,7 @@ session_start();
 require_once 'conexion.php';
 
 if (!isset($_SESSION['usuario_id'])) {
-    header("Location: login.php");
+    header("Location: index.php");
     exit();
 }
 
@@ -157,18 +157,6 @@ $inversiones = $stmt->fetchAll();
                                     <option value="GRT" class="text-white font-bold">The Graph (GRT)</option>
                                     <option value="FIL" class="text-white font-bold">Filecoin (FIL)</option>
                                     <option value="ICP" class="text-white font-bold">Internet Computer (ICP)</option>
-                                </optgroup>
-
-                                <optgroup label="Metaverso & Memecoins" class="bg-dark-950 text-gray-400 font-normal">
-                                    <option value="DOGE" class="text-white font-bold">Dogecoin (DOGE)</option>
-                                    <option value="SHIB" class="text-white font-bold">Shiba Inu (SHIB)</option>
-                                    <option value="PEPE" class="text-white font-bold">Pepe (PEPE)</option>
-                                    <option value="WIF" class="text-white font-bold">dogwifhat (WIF)</option>
-                                    <option value="FLOKI" class="text-white font-bold">Floki (FLOKI)</option>
-                                    <option value="APE" class="text-white font-bold">ApeCoin (APE)</option>
-                                    <option value="SAND" class="text-white font-bold">The Sandbox (SAND)</option>
-                                    <option value="MANA" class="text-white font-bold">Decentraland (MANA)</option>
-                                    <option value="GALA" class="text-white font-bold">Gala (GALA)</option>
                                 </optgroup>
                             </select>
                             <div class="absolute right-4 top-[14px] pointer-events-none text-gray-500 group-hover:text-brand transition-colors">
@@ -363,7 +351,7 @@ $inversiones = $stmt->fetchAll();
         }
 
         function borrarInversion(id) {
-            if (confirm('¿Confirmas el cierre de esta posición?')) {
+            if (confirm('¿Quieres eliminar este activo?')) {
                 fetch('eliminarInversiones.php?id=' + id)
                 .then(r => r.text()).then(res => { if (res.trim() === 'ok') location.reload(); });
             }
