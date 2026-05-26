@@ -14,13 +14,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login_btn'])) {
     $password = $_POST['password'];
 
     try {
-        $stmt = $conexion->prepare("SELECT id, nombre, password FROM usuarios WHERE email = ?");
+        $stmt = $conexion->prepare("SELECT id, nombre, password, rol FROM usuarios WHERE email = ?");
         $stmt->execute([$email]);
         $usuario = $stmt->fetch();
 
         if ($usuario && password_verify($password, $usuario['password'])) {
             $_SESSION['usuario_id'] = $usuario['id'];
             $_SESSION['nombre'] = $usuario['nombre'];
+            $_SESSION['rol'] = $usuario['rol'];
             header("Location: dashboard.php");
             exit();
         } else {
