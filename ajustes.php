@@ -274,8 +274,27 @@ $foto_perfil = (!empty($avatar_actual) && $avatar_actual != 'default.png') ? 'up
                                     </select>
                                 </div>
 
+                                <div class="flex items-center justify-between p-5 bg-dark-900/40 rounded-2xl border border-white/5 md:col-span-2 shadow-inner gap-4">
+
+                                    <div>
+                                        <p class="font-bold text-sm text-gray-200">
+                                            Modo Privacidad Activo
+                                        </p>
+
+                                        <p class="text-[10px] text-gray-500 mt-0.5">
+                                            Oculta tus importes y ganancias en el panel principal.
+                                        </p>
+                                    </div>
+
+                                    <label class="switch">
+                                        <input type="checkbox" name="privacidad" <?= !empty($user['modo_privacidad']) ? 'checked' : '' ?>>
+                                        <span class="slider-switch"></span>
+                                    </label>
+
+                                </div>
+
                                 <button type="submit"
-                                        class="bg-brand text-dark-950 font-black px-7 py-3.5 rounded-xl col-span-2 uppercase text-xs tracking-widest transition-all">
+                                        class="bg-brand text-dark-950 font-black px-7 py-3.5 rounded-xl md:col-span-2 uppercase text-xs tracking-widest transition-all">
                                     Guardar Preferencias
                                 </button>
 
