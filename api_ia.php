@@ -1,25 +1,60 @@
 <?php
+
 session_start();
 require_once 'conexion.php';
 
 if (!isset($_SESSION['usuario_id']) || !isset($_POST['mensaje'])) {
-    die("Acceso denegado.");
+    http_response_code(403);
+    exit("Acceso denegado.");
 }
 
-$mensaje = strtolower(trim($_POST['mensaje']));
+$mensajeOriginal = trim($_POST['mensaje']);
 
-// Lógica de respuesta basada en palabras clave
-if (strpos($mensaje, 'invertir') !== false || strpos($mensaje, 'recomienda') !== false || strpos($mensaje, 'comprar') !== false) {
-    // Podrías hacer consultas a la BBDD aquí para ver su portafolio real
-    echo "Analizando el mercado actual... Te recomiendo diversificar. Si buscas bajo riesgo, los ETFs ligados al S&P 500 son sólidos. Si buscas exposición asimétrica y toleras volatilidad, asignar un 5-10% a Bitcoin (BTC) o Solana (SOL) es la estrategia institucional del momento. Usa el módulo 'Gestor de Activos' para registrar la compra.";
+function normalizarTexto($texto) {
+    $texto = mb_strtolower($texto, 'UTF-8');
 
-} elseif (strpos($mensaje, 'libertad') !== false || strpos($mensaje, 'fire') !== false || strpos($mensaje, 'retiro') !== false) {
-    echo "El movimiento FIRE se basa en la Regla del 4%. Ve a la pestaña 'Libertad Financiera' en el menú. Allí el algoritmo cruzará tus gastos mensuales para decirte exactamente cuánto capital necesitas acumular para poder vivir de rentas.";
+    $acentos = [
+        'á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u',
+        'ü' => 'u', 'ñ' => 'n'
+    ];
 
-} elseif (strpos($mensaje, 'hipoteca') !== false || strpos($mensaje, 'interes') !== false) {
-    echo "Nuestro Simulador Hipotecario está conectado a un núcleo de Java que calcula la amortización exacta. Cuanto menor sea el TIN y menor el plazo, menos dinero regalarás al banco en intereses. ¡Pruébalo en la pestaña Simulador!";
+    return strtr($texto, $acentos);
+}
 
+function contiene($texto, $palabras) {
+    foreach ($palabras as $palabra) {
+        if (strpos($texto, $palabra) !== false) {
+            return true;
+        }
+    }
+    return false;
+}
+
+$mensaje = normalizarTexto($mensajeOriginal);
+
+if (contiene($mensaje, ['invertir', 'inversion', 'inversiones', 'comprar', 'cripto', 'bitcoin', 'ethereum', 'solana', 'activo'])) {
+
+    echo "Puedes usar el módulo de Mis Inversiones para registrar activos y ver su evolución. Como recomendación general, es importante diversificar y no concentrar todo el capital en un único activo.";
+} elseif (contiene($mensaje, ['fire', 'libertad', 'retiro', 'jubilar', 'independencia financiera'])) {
+
+    echo "El módulo FIRE calcula cuánto capital necesitarías para alcanzar independencia financiera usando tus gastos mensuales y una tasa de retiro. Es útil para estimar objetivos a largo plazo.";
+} elseif (contiene($mensaje, ['hipoteca', 'prestamo', 'cuota', 'interes', 'tin', 'amortizacion'])) {
+
+    echo "El simulador hipotecario permite calcular una cuota mensual estimada a partir del capital, el interés anual y el plazo. También muestra cuánto pagarías en intereses totales.";
+} elseif (contiene($mensaje, ['noticia', 'noticias', 'mercado', 'blog', 'articulo'])) {
+
+    echo "El módulo de noticias muestra publicaciones financieras creadas desde el panel de administración. Las noticias largas aparecen resumidas y pueden desplegarse con 'Leer más'.";
+} elseif (contiene($mensaje, ['admin', 'administrador', 'usuario', 'rol', 'crear usuario'])) {
+
+    echo "El panel de administración permite crear usuarios, asignar roles y publicar noticias. Solo pueden acceder los usuarios con rol de administrador.";
+} elseif (contiene($mensaje, ['ajustes', 'configuracion', 'divisa', 'moneda', 'euro', 'dolar', 'usd', 'eur'])) {
+
+    echo "Desde Ajustes puedes cambiar datos del perfil, contraseña, divisa principal y frecuencia de actualización. Si cambias la divisa, la plataforma adapta los importes mostrados.";
+} elseif (contiene($mensaje, ['contrasena', 'password', 'clave', 'seguridad'])) {
+
+    echo "La contraseña se puede cambiar desde Ajustes > Seguridad. La aplicación debe guardar las contraseñas cifradas usando password_hash para proteger los datos del usuario.";
 } else {
-    echo "Como asistente financiero virtual, puedo ayudarte a analizar tu portafolio, explicarte conceptos como el Interés Compuesto, o recomendarte distribuciones de activos. ¿En qué prefieres enfocarte hoy?";
+
+    echo "Puedo ayudarte con inversiones, hipotecas, noticias, ajustes, administración, cambio de divisa o libertad financiera. Prueba a preguntarme por alguno de esos módulos.";
 }
 ?>
